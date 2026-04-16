@@ -1,150 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { apiSvc, authSvc } from './services/api';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { CssBaseline, ThemeProvider, createTheme, GlobalStyles } from '@mui/material';
+
+// Pages
+import Login from './pages/Login';
+import ProductList from './pages/ProductList';
+import AddProduct from './pages/AddProduct';
+
+// Components
+import Layout from './components/Layout';
+import { authSvc } from './services/api';
+
+// Create a Professional Charcoal/Purple Theme
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#8b5cf6', // Soft Purple (600)
+      light: '#a78bfa',
+      dark: '#7c3aed',
+    },
+    secondary: {
+      main: '#ec4899', // Pinkish/Rose 600
+      light: '#f472b6',
+      dark: '#db2777',
+    },
+    background: {
+      default: '#121212', // Neutral Charcoal/Black
+      paper: '#1a1a1a',   // Darker Grey
+    },
+    text: {
+      primary: '#f8fafc',
+      secondary: '#94a3b8',
+    },
+    divider: 'rgba(255, 255, 255, 0.05)',
+  },
+  typography: {
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    h4: {
+      fontWeight: 800,
+      letterSpacing: '-0.02em',
+    },
+    h5: {
+      fontWeight: 700,
+    },
+    button: {
+      fontWeight: 700,
+      textTransform: 'none',
+    },
+  },
+  shape: {
+    borderRadius: 8,
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 6,
+          padding: '8px 24px',
+          transition: 'all 0.1s ease-in-out',
+        },
+        containedPrimary: {
+          backgroundColor: '#8b5cf6',
+          '&:hover': {
+             backgroundColor: '#7c3aed',
+             boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+          }
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 6,
+          backgroundColor: 'rgba(255, 255, 255, 0.02)',
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          fontWeight: 700,
+          color: '#94a3b8',
+          padding: '16px',
+        },
+        body: {
+          padding: '16px',
+        }
+      },
+    },
+  },
+});
+
+const ProtectedRoute = ({ children }) => {
+  if (!authSvc.isLoggedIn()) {
+    return <Navigate to="/login" replace />;
+  }
+  return <Layout>{children}</Layout>;
+};
 
 function App() {
-  const [items, setItems] = useState([]);
-  const [colors, setColors] = useState([]);
-  const [auth, setAuth] = useState(authSvc.isLoggedIn());
-  const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState('');
-  const [page, setPage] = useState('list');
-  const [form, setForm] = useState({ name: '', price: 0, color: '' });
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    if (auth) load();
-  }, [auth]);
-
-  const load = async () => {
-    setBusy(true);
-    try {
-      const data = await apiSvc.getItems();
-      setItems(data);
-      updateColors(data);
-    } catch {
-      setMsg('Failed to load items.');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const updateColors = (list) => {
-    const unique = [...new Set(list.map(i => i.color))].filter(c => c);
-    setColors(unique);
-  };
-
-  const onFilter = async (color) => {
-    setFilter(color);
-    setBusy(true);
-    try {
-      const data = color ? await apiSvc.getByColor(color) : await apiSvc.getItems();
-      setItems(data);
-    } catch {
-      setMsg('Filter failed.');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const login = async (e) => {
-    e.preventDefault();
-    try {
-      await authSvc.login(e.target.user.value, e.target.pass.value);
-      setAuth(true);
-      setMsg('');
-    } catch {
-      setMsg('Invalid login.');
-    }
-  };
-
-  const logout = () => {
-    authSvc.logout();
-    setAuth(false);
-  };
-
-  const save = async (e) => {
-    e.preventDefault();
-    try {
-      await apiSvc.add(form);
-      setForm({ name: '', price: 0, color: '' });
-      setPage('list');
-      await load();
-      setFilter('');
-    } catch {
-      setMsg('Could not save product.');
-    }
-  };
-
-  if (!auth) {
-    return (
-      <div style={{ maxWidth: '350px', margin: '100px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '5px', fontFamily: 'Arial' }}>
-        <h3>Please Login</h3>
-        <form onSubmit={login}>
-          <input name="user" placeholder="User" style={{ width: '100%', marginBottom: '10px', padding: '10px' }} defaultValue="admin" />
-          <input name="pass" type="password" placeholder="Pass" style={{ width: '100%', marginBottom: '10px', padding: '10px' }} defaultValue="password123" />
-          <button type="submit" style={{ width: '100%', padding: '10px', background: '#007bff', color: '#fff', border: 'none' }}>Go</button>
-        </form>
-        {msg && <p style={{ color: 'red' }}>{msg}</p>}
-      </div>
-    );
-  }
-
   return (
-    <div style={{ maxWidth: '800px', margin: '30px auto', fontFamily: 'Arial', padding: '10px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
-        <h2>My Inventory</h2>
-        <button onClick={logout} style={{ border: 'none', color: '#fff', background: '#666', padding: '5px 10px', cursor: 'pointer', borderRadius: '4px' }}>Log out</button>
-      </div>
-
-      <div style={{ marginTop: '20px' }}>
-        <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
-          <button onClick={() => setPage('list')} style={{ padding: '8px 12px', background: page === 'list' ? '#18a327' : '#eee', color: page === 'list' ? '#fff' : '#000', border: 'none' }}>All Items</button>
-          <button onClick={() => setPage('create')} style={{ padding: '8px 12px', background: page === 'create' ? '#1f6eff' : '#eee', color: page === 'create' ? '#fff' : '#000', border: 'none' }}>New Product</button>
-          
-          <select value={filter} onChange={(e) => onFilter(e.target.value)} style={{ padding: '8px', background: '#a134bd', color: '#fff' }}>
-            <option value="">Filter by Color</option>
-            {colors.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
-        </div>
-
-        {page === 'create' ? (
-          <div>
-            <h3>New Product</h3>
-            <form onSubmit={save} style={{ display: 'grid', gap: '15px' }}>
-              <input required placeholder="Name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={{ padding: '10px' }} />
-              <input required placeholder="Color" value={form.color} onChange={e => setForm({ ...form, color: e.target.value })} style={{ padding: '10px' }} />
-              <input required type="number" step="0.01" placeholder="Price" value={form.price} onChange={e => setForm({ ...form, price: parseFloat(e.target.value) })} style={{ padding: '10px' }} />
-              <button type="submit" style={{ width: '150px', padding: '10px', background: '#28a745', color: '#fff', border: 'none' }}>Save</button>
-            </form>
-          </div>
-        ) : (
-          <div>
-            {busy ? <p>Loading...</p> : (
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ textAlign: 'left', borderBottom: '1px solid #ddd' }}>
-                    <th style={{ padding: '10px' }}>Name</th>
-                    <th style={{ padding: '10px' }}>Color</th>
-                    <th style={{ padding: '10px' }}>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map(i => (
-                    <tr key={i.id} style={{ borderBottom: '1px solid #eee' }}>
-                      <td style={{ padding: '10px' }}>{i.name}</td>
-                      <td style={{ padding: '10px' }}>{i.color}</td>
-                      <td style={{ padding: '10px' }}>${i.price}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-            {items.length === 0 && !busy && <p>No products yet.</p>}
-          </div>
-        )}
-      </div>
-      {msg && <p style={{ color: 'red', marginTop: '10px' }}>{msg}</p>}
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <GlobalStyles styles={{
+        body: {
+          backgroundColor: '#121212',
+          backgroundImage: 'radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.05) 0px, transparent 50%)',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+        },
+      }} />
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+          <Route path="/products/add" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
+          <Route path="*" element={<Navigate to="/products" replace />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 

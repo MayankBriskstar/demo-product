@@ -15,6 +15,9 @@ D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Microsoft.IdentityModel.Proto
 D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Microsoft.OpenApi.dll
+D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\Project\DemoProduct\productapi\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\productapi.csproj.AssemblyReference.cache
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\rpswa.dswa.cache.json
@@ -24,6 +27,7 @@ D:\Project\DemoProduct\productapi\obj\Debug\net9.0\productapi.AssemblyInfo.cs
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\productapi.csproj.CoreCompileInputs.cache
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\productapi.MvcApplicationPartsAssemblyInfo.cs
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\productapi.MvcApplicationPartsAssemblyInfo.cache
+D:\Project\DemoProduct\productapi\obj\Debug\net9.0\productapi.sourcelink.json
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\rjimswa.dswa.cache.json
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
@@ -38,6 +42,3 @@ D:\Project\DemoProduct\productapi\obj\Debug\net9.0\refint\productapi.dll
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\productapi.pdb
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\productapi.genruntimeconfig.cache
 D:\Project\DemoProduct\productapi\obj\Debug\net9.0\ref\productapi.dll
-D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
-D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-D:\Project\DemoProduct\productapi\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

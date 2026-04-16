@@ -429,3 +429,4 @@ D:\Project\DemoProduct\productunittest\obj\Debug\net9.0\ref\productunittest.dll
 D:\Project\DemoProduct\productunittest\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\Project\DemoProduct\productunittest\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Project\DemoProduct\productunittest\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Project\DemoProduct\productunittest\obj\Debug\net9.0\productunittest.sourcelink.json
